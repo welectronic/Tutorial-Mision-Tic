@@ -1,8 +1,8 @@
-from http import client
 import json
-import pymongo
-import certifi
+from http import client
 
+import certifi
+import pymongo
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from waitress import serve
@@ -10,10 +10,10 @@ from waitress import serve
 app=Flask(__name__)
 cors = CORS(app)
 
-from Controladores.ControladorEstudiante import ControladorEstudiante
 from Controladores.ControladorDepartamento import ControladorDepartamento
-from Controladores.ControladorMateria import ControladorMateria
+from Controladores.ControladorEstudiante import ControladorEstudiante
 from Controladores.ControladorInscripcion import ControladorInscripcion
+from Controladores.ControladorMateria import ControladorMateria
 
 miControladorEstudiante=ControladorEstudiante()
 miControladorDepartamento=ControladorDepartamento()
@@ -113,14 +113,8 @@ def eliminarMateria(id):
     return jsonify(json)
 
 @app.route("/inscripciones",methods=['GET'])
-def getInscripcions():
+def getInscripciones():
     json=miControladorInscripcion.index()
-    return jsonify(json)
-
-@app.route("/inscripciones",methods=['POST'])
-def crearInscripcion():
-    data = request.get_json()
-    json=miControladorInscripcion.create(data)
     return jsonify(json)
 
 @app.route("/inscripciones/<string:id>",methods=['GET'])
@@ -128,15 +122,26 @@ def getInscripcion(id):
     json=miControladorInscripcion.show(id)
     return jsonify(json)
 
-@app.route("/inscripciones/<string:id>",methods=['PUT'])
-def modificarInscripcion(id):
+@app.route("/inscripciones/estudiante/<string:id_estudiante>/materia/<string:id_materia>",methods=['POST'])
+def crearInscripcion(id_estudiante,id_materia):
     data = request.get_json()
-    json=miControladorInscripcion.update(id,data)
+    json=miControladorInscripcion.create(data,id_estudiante,id_materia)
     return jsonify(json)
 
-@app.route("/inscripciones/<string:id>",methods=['DELETE'])
-def eliminarInscripcion(id):
-    json=miControladorInscripcion.delete(id)
+@app.route("/inscripciones/<string:id_inscripcion>/estudiante/<string:id_estudiante>/materia/<string:id_materia>",methods=['PUT'])
+def modificarInscripcion(id_inscripcion,id_estudiante,id_materia):
+    data = request.get_json()
+    json=miControladorInscripcion.update(id_inscripcion,data,id_estudiante,id_materia)
+    return jsonify(json)
+
+@app.route("/inscripciones/<string:id_inscripcion>",methods=['DELETE'])
+def eliminarInscripcion(id_inscripcion):
+    json=miControladorInscripcion.delete(id_inscripcion)
+    return jsonify(json)
+
+@app.route("/materias/<string:id>/departamento/<string:id_departamento>",methods=['PUT'])
+def asignarDepartamentoAMateria(id,id_departamento):
+    json=miControladorMateria.asignarDepartamento(id,id_departamento)
     return jsonify(json)
 
 if __name__=='__main__':
