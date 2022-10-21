@@ -1,39 +1,27 @@
+from Repositorios.RepositorioDepartamento import RepositorioDepartamento
 from Modelos.Departamento import Departamento
+
 class ControladorDepartamento():
     
     def __init__(self):
-        print("Creando ControladorDepartamento")
+        self.repositorioDepartamento = RepositorioDepartamento()
     
     def index(self):
-        print("Listar todos los departamentos")
-        # unDepartamento={
-        #     "_id":"abc123",
-        #     "cedula":"123",
-        #     "nombre":"Juan",
-        #     "apellido":"Perez"
-        # }
-        # return [unDepartamento]
+        return self.repositorioDepartamento.findAll()
     
     def create(self,infoDepartamento):
-        print("Crear un departamento")
-        elDepartamento = Departamento(infoDepartamento)
-        return elDepartamento.__dict__
+        nuevoDepartamento=Departamento(infoDepartamento)
+        return self.repositorioDepartamento.save(nuevoDepartamento)
     
     def show(self,id):
-        print("Mostrando un departamento con id ",id)
-        # elDepartamento = {
-        #     "_id": id,
-        #     "cedula": "123",
-        #     "nombre": "Juan",
-        #     "apellido": "Perez"
-        # }
-        # return elDepartamento
-    
-    def update(self,id,infoDepartamento):
-        print("Actualizando departamento con id ",id)
-        elDepartamento = Departamento(infoDepartamento)
+        elDepartamento=Departamento(self.repositorioDepartamento.findById(id))
         return elDepartamento.__dict__
     
+    def update(self,id,infoDepartamento):
+        DepartamentoActual=Departamento(self.repositorioDepartamento.findById(id))
+        DepartamentoActual.nombre=infoDepartamento["nombre"]
+        DepartamentoActual.descripcion = infoDepartamento["descripcion"]
+        return self.repositorioDepartamento.save(DepartamentoActual)
+    
     def delete(self,id):
-        print("Elimiando departamento con id ",id)
-        return {"deleted_count":1}
+        return self.repositorioDepartamento.delete(id)

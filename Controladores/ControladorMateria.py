@@ -1,39 +1,30 @@
+from Repositorios.RepositorioMateria import RepositorioMateria
+from Repositorios.RepositorioDepartamento import RepositorioDepartamento
 from Modelos.Materia import Materia
+from Modelos.Departamento import Departamento
+
 class ControladorMateria():
     
     def __init__(self):
-        print("Creando ControladorMateria")
+        self.repositorioMateria = RepositorioMateria()
+        self.repositorioDepartamento = RepositorioDepartamento()
     
     def index(self):
-        print("Listar tados las materias")
-        # unMateria={
-        #     "_id":"abc123",
-        #     "cedula":"123",
-        #     "nombre":"Juan",
-        #     "apellido":"Perez"
-        # }
-        # return [unMateria]
+        return self.repositorioMateria.findAll()
     
     def create(self,infoMateria):
-        print("Crear una materia")
-        elMateria = Materia(infoMateria)
-        return elMateria.__dict__
+        nuevoMateria=Materia(infoMateria)
+        return self.repositorioMateria.save(nuevoMateria)
     
     def show(self,id):
-        print("Mostrando una materia con id ",id)
-        # elMateria = {
-        #     "_id": id,
-        #     "cedula": "123",
-        #     "nombre": "Juan",
-        #     "apellido": "Perez"
-        # }
-        # return elMateria
-    
-    def update(self,id,infoMateria):
-        print("Actualizando materia con id ",id)
-        elMateria = Materia(infoMateria)
+        elMateria=Materia(self.repositorioMateria.findById(id))
         return elMateria.__dict__
     
+    def update(self,id,infoMateria):
+        materiaActual=Materia(self.repositorioMateria.findById(id))
+        materiaActual.nombre=infoMateria["nombre"]
+        materiaActual.creditos = infoMateria["creditos"]
+        return self.repositorioMateria.save(materiaActual)
+    
     def delete(self,id):
-        print("Elimiando materia con id ",id)
-        return {"deleted_count":1}
+        return self.repositorioMateria.delete(id)

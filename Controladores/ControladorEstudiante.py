@@ -1,6 +1,5 @@
-from Modelos.Estudiante import Estudiante
 from Repositorios.RepositorioEstudiante import RepositorioEstudiante
-
+from Modelos.Estudiante import Estudiante
 
 class ControladorEstudiante():
     
