@@ -1,4 +1,7 @@
+from http import client
 import json
+import pymongo
+import certifi
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
@@ -140,3 +143,7 @@ if __name__=='__main__':
     dataConfig = loadFileConfig()
     print("Server running : "+"http://"+dataConfig["url-backend"]+":" + str(dataConfig["port"]))
     serve(app,host=dataConfig["url-backend"],port=dataConfig["port"])
+    ca= certifi.where()
+    client = pymongo.MongoClient(dataConfig["data-db-connection"],tlsCAFile=ca)
+    baseDatos=client[dataConfig["name-db"]]
+    print(baseDatos.list_collection_names())
