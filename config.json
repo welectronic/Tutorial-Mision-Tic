@@ -1,6 +1,0 @@
-{
-    "url-backend": "127.0.0.1",
-    "port": 9999,
-    "data-db-connection": "mongodb+srv://usuario-pruebas:misiontic2022@cluster-mtic.0vfaige.mongodb.net/?retryWrites=true&w=majority",
-    "name-db": "bd-registro-academico"
-}
